@@ -10,6 +10,8 @@ import Buttons from './HomePage/Components/Buttons'
 import yosemite from './HomePage/Assets/yosemite.jpg';
 import './Style/homepage.css'
 import HighlightGallery from './HomePage/Components/HighlightGallery';
+import Contact from './HomePage/Components/Contact'
+
 const HomePage = () => {
   return (
     // <Navbar/>
@@ -18,6 +20,7 @@ const HomePage = () => {
         <Welcome/>
         <HighlightGallery/>
         <Buttons/>
+        <Contact />
     </div>
   )
 }
