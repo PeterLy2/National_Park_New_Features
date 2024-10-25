@@ -9,11 +9,15 @@
 // ParkInfoComponent.jsx
 import React, { useState, useEffect } from 'react';
 import { ParkInfo } from '../Functionality/ParkInfo'; // Importing the functionality
+import { OpenAIParkInfo } from '../Functionality/OpenAIParkInfo'; // Import your OpenAIParkInfo function
 import '../../Style/parkInfo.css';
 import ParkVideos from './ParkVideos';
 
 function ParkInfoComponent() {
     const [parkJSON, setParks] = useState([]);
+    const [openAIInfo, setOpenAIInfo] = useState(''); // State to store the OpenAI API response
+    const [loading, setLoading] = useState(true); // State to handle loading state
+
     
     var url = new URL(window.location);
     var page = 0;
@@ -46,6 +50,23 @@ function ParkInfoComponent() {
 
         fetchData();
     }, []);
+
+    useEffect(() => {
+        // Fetch the data from OpenAI when the component mounts
+        const fetchParkInfo = async () => {
+          try {
+            const response = await OpenAIParkInfo(parkCode, 1); // Adjust '1' to the correct page number
+            setOpenAIInfo(response); // Store the response in state
+          } catch (error) {
+            console.error('Error fetching OpenAI info:', error);
+          } finally {
+            setLoading(false); // Stop the loading state
+          }
+        };
+    
+        fetchParkInfo();
+      }, [ParkInfo.code]); // Dependency array: refetch if park code changes
+    
 
     if(parkJSON.length>1){ //list all the parks
         return (
@@ -122,6 +143,7 @@ function ParkInfoComponent() {
                                         </ul>
                                         <br></br>
                                         <p>{park.description}</p>
+                                        <p>{openAIInfo}</p>
                                         <a href={park.url} target="_blank" rel="noreferrer">For More Information</a>
                                         <br></br>
                                         <br></br>
